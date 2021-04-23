@@ -4,8 +4,8 @@ Tkinter UI for application creating multi-folder structure
 
 from tkinter import *
 from tkinter import filedialog
-
 from multiDirectory import MultiDirectory
+
 
 
 class App:
@@ -33,6 +33,7 @@ class App:
         self.enum_radio.pack(side=LEFT)
 
         self.make_dir = Button(frame, text="make directories", command=directory.driver)
+
         self.make_dir.pack(side=LEFT)
 
 
