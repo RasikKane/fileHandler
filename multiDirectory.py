@@ -6,66 +6,61 @@ Algorithm:
 """
 import os
 
-# When file address is not absolute, file is searched in directory of this code
-rel_prefix = './'
-rel_postfix = '/'
-# default variables in absence of stdin arguments
-file_addr = ''
-rel_dir_addr = ''
-enum_flag = False
-sep = '_'
 
+class MultiDirectory:
 
-def get_path(address, prefix=rel_prefix, postfix=rel_postfix):
-    # open input text file file_address and store each line denoting folder name into a list using readlines()
-    # enumerate the list and create folders using for loop
-    if os.path.isabs(address):
-        return address + postfix if os.path.isdir(address) else address
-    else:
-        return prefix + address
+    def __init__(self):
+        # When file address is not absolute, file is searched in directory of code
+        self.rel_prefix = './'
+        self.rel_postfix = '/'
+        # default variables in absence of stdin arguments
+        self.file_addr = ''
+        self.rel_dir_addr = ''
+        self.enum_flag = False
+        self.sep = '_'
 
-
-def make_folders(in_file, flag, separator, rel_folder_address, prefix):
-    try:
-        print(flag)
-        if flag is True:
-            for index, name in enumerate(in_file.readlines()):
-                os.mkdir(get_path(rel_folder_address, prefix) + str(index) + separator + name.strip())
+    def get_path(self, address):
+        # open input text file file_address and store each line denoting folder name into a list using readlines()
+        # enumerate the list and create folders using for loop
+        if os.path.isabs(address):
+            return address + self.rel_postfix if os.path.isdir(address) else address
         else:
-            for name in in_file.readlines():
-                os.mkdir(get_path(rel_folder_address, prefix) + name.strip())
-    except OSError as e:
-        print(e)
+            return self.rel_prefix + address
 
+    def make_folders(self, in_file):
+        try:
+            if self.enum_flag is True:
+                for index, name in enumerate(in_file.readlines()):
+                    os.mkdir(self.get_path(self.rel_dir_addr) + str(index) + self.sep + name.strip())
+            else:
+                for name in in_file.readlines():
+                    os.mkdir(self.get_path(self.rel_dir_addr) + name.strip())
+        except OSError as e:
+            print(e)
 
-# driver code
-def driver():
-    global file_addr, enum_flag, sep, rel_dir_addr
-    try:
-        print(file_addr, rel_dir_addr)
-        if not os.path.isfile(file_addr):
-            raise IOError("Provide input file")
-        else:
-            file = open(get_path(file_addr, rel_prefix, rel_prefix))
-            make_folders(file, enum_flag, sep, rel_dir_addr, rel_prefix)
-    except IOError or FileNotFoundError as e:
-        print(e)
+    # driver code
+    def driver(self):
+        try:
+            if not os.path.isfile(self.file_addr):
+                raise IOError("Provide input file")
+            else:
+                file = open(self.get_path(self.file_addr))
+                self.make_folders(file)
+        except IOError or FileNotFoundError as e:
+            print(e)
 
+    def browse_button(self, open_item, ui_function):
+        """
+        open_item: <string>, ui_function: <filedlog call for a file/ directory>
+        This function browses system and store path of selected storage item into variable.
+        If it is a directory; its absolute path returned by filedilog function is stored.
+        If it is a file; string containing absolute path to file is extracted using 'name' key in returns
+        of filedilog function.
+        """
+        if open_item is 'file':
+            self.file_addr = ui_function().name
+        if open_item is 'directory':
+            self.rel_dir_addr = ui_function()
 
-def browse_button(open_item, ui_function):
-    """
-    open_item: <string>, ui_function: <filedlog call for a file/ directory>
-    This function browses system and store path of selected storage item into variable.
-    If it is a directory; its absolute path is stored.
-    If it is a file;
-    """
-    global file_addr, rel_dir_addr
-    if open_item is 'file':
-        file_addr = ui_function().name
-    if open_item is 'directory':
-        rel_dir_addr = ui_function()
-
-
-def set_flag(flag):
-    global enum_flag
-    enum_flag = flag
+    def set_flag(self, flag):
+        self.enum_flag = flag
