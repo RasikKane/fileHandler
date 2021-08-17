@@ -1,7 +1,7 @@
 # file Handler
 File handler is a windows tool written using python tkinter UI to:
 * Create nested directory structure using a csv file 
-* Perform bulk unzipping operations on achieve files  
+* Perform bulk unzipping operations on archieve files  
 
 ## Demo
 ![file handler](https://user-images.githubusercontent.com/32463890/117538213-117e2b00-affd-11eb-8dbc-75ab74aac9fb.gif)
